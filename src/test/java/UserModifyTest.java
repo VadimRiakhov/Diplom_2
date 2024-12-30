@@ -4,19 +4,22 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import model.UserCreateData;
 import model.UserGeneratorData;
+import model.UserLoginData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+
 public class UserModifyTest {
-    UserApi userApi;
-    String accessToken="";
+    private UserApi userApi;
+    private String accessToken="";
+    private UserCreateData userCreateData;
     // создание пользователя
     @Before
     public void setUp(){
         userApi = new UserApi();
         // генерируем случайного пользователя
-        UserCreateData userCreateData = UserGeneratorData.getRandomUser();
+        userCreateData = UserGeneratorData.getRandomUser();
         // создаем пользователя и получаем ответ от сервера
         ValidatableResponse response = userApi.createUser(userCreateData);
         // получаем токен для последующего удаления пользователя
@@ -32,7 +35,7 @@ public class UserModifyTest {
         // изменяем данные пользователя и получаем ответ от сервера
         ValidatableResponse response = userApi.modifyUser(accessToken, userModifyData);
         // проверяем ответ сервера
-        userApi.checkResponseForUserModifyWithAuthorization(response);
+        userApi.checkResponseForUserModifyWithAuthorization(response, userCreateData.getName(), userModifyData.getEmail());
     }
 
     @Test
@@ -44,7 +47,11 @@ public class UserModifyTest {
         // изменяем данные пользователя и получаем ответ от сервера
         ValidatableResponse response = userApi.modifyUser(accessToken, userModifyData);
         // проверяем ответ сервера
-        userApi.checkResponseForUserModifyWithAuthorization(response);
+        userApi.checkResponseForUserModifyWithAuthorization(response, userCreateData.getName(), userCreateData.getEmail());
+        // так как новый пароль в ответе не приходит, пробуем авторизоваться с новым паролем
+        response = userApi.loginUser(new UserLoginData(userModifyData.getPassword(), userCreateData.getEmail()));
+        // проверяем ответ сервера
+        userApi.checkResponseForUserLoginValidCredentials(response);
     }
 
     @Test
@@ -56,7 +63,7 @@ public class UserModifyTest {
         // изменяем данные пользователя и получаем ответ от сервера
         ValidatableResponse response = userApi.modifyUser(accessToken, userModifyData);
         // проверяем ответ сервера
-        userApi.checkResponseForUserModifyWithAuthorization(response);
+        userApi.checkResponseForUserModifyWithAuthorization(response, userModifyData.getName(), userCreateData.getEmail());
     }
 
     @Test

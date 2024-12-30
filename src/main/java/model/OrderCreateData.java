@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderCreateData {
-    String[] ingredients;
+    private String[] ingredients;
 }

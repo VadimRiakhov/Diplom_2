@@ -109,11 +109,13 @@ public class UserApi extends RestApi{
     }
 
     @Step("Проверка статуса и тела ответа при изменении данных пользователя с авторизацией")
-    public void checkResponseForUserModifyWithAuthorization(ValidatableResponse response){
+    public void checkResponseForUserModifyWithAuthorization(ValidatableResponse response, String name, String email){
         response.log().all()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
                 .and()
+                .body("user.name", equalTo(name))
+                .body("user.email", equalTo(email))
                 .body(matchesJsonSchemaInClasspath("userModifySchema.json"));
     }
 

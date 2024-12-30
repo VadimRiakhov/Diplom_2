@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class OrderCreateTest {
-    UserApi userApi;
-    String accessToken="";
+    private UserApi userApi;
+    private String accessToken="";
 
     // создание пользователя
     @Before

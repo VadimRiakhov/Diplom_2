@@ -10,8 +10,8 @@ import org.junit.Test;
 
 public class UserCreateTest {
 
-    UserApi userApi;
-    String accessToken="";
+    private UserApi userApi;
+    private String accessToken="";
     @Before
     public void setUp(){
         userApi = new UserApi();

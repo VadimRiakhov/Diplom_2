@@ -28,7 +28,7 @@ public class UserCreateValidCredParameterizedTest {
     }
 
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name="Имя - {0}, Пароль - {1}, Email - {2}")
     public static Object[][] getData(){
         return new Object[][]{
                 {"Ivan", "123456Ivan", "ivan123456@yandex.ru"},

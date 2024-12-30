@@ -12,9 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class OrdersGetByUserTest {
-    UserApi userApi;
-    OrderApi orderApi;
-    String accessToken="";
+    private UserApi userApi;
+    private OrderApi orderApi;
+    private String accessToken="";
     // создание пользователя
     @Before
     public void setUp(){

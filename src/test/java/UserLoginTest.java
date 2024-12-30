@@ -5,15 +5,16 @@ import io.restassured.response.ValidatableResponse;
 import model.UserCreateData;
 import model.UserGeneratorData;
 import model.UserLoginData;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import net.datafaker.Faker;
 
 public class UserLoginTest {
-    UserApi userApi;
-    String accessToken="";
-    UserLoginData userLoginData;
+    private UserApi userApi;
+    private String accessToken="";
+    private UserLoginData userLoginData;
+    Faker faker;
 
     // создание пользователя
     @Before
@@ -25,6 +26,7 @@ public class UserLoginTest {
         // получаем токен для последующего удаления пользователя
         accessToken = response.extract().path("accessToken");
         userLoginData = new UserLoginData(userCreateData);
+        faker = new Faker();
     }
 
     @Test
@@ -41,7 +43,7 @@ public class UserLoginTest {
     @DisplayName("Авторизация пользователя с неверным логином")
     @Description("Негативный тест, сервер должен вернуть 401 Unauthorized")
     public void loginUserWrongEmailResponseUnauthorizedTest(){
-        String wrongEmail = RandomStringUtils.randomAlphabetic(8)+"@yandex.ru";
+        String wrongEmail = faker.internet().emailAddress();
         userLoginData.setEmail(wrongEmail);
         // логин пользователя и получаем ответ от сервера
         ValidatableResponse response = userApi.loginUser(userLoginData);
@@ -53,7 +55,7 @@ public class UserLoginTest {
     @DisplayName("Авторизация пользователя с неверным паролем")
     @Description("Негативный тест, сервер должен вернуть 401 Unauthorized")
     public void loginUserWrongPasswordResponseUnauthorizedTest(){
-        String wrongPassword = RandomStringUtils.randomAlphabetic(8);
+        String wrongPassword = faker.internet().password(6, 10, true);
         userLoginData.setPassword(wrongPassword);
         // логин пользователя и получаем ответ от сервера
         ValidatableResponse response = userApi.loginUser(userLoginData);
